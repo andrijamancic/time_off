@@ -1,18 +1,25 @@
-from datetime import datetime
+from datetime import date
 
-from pydantic import BaseModel, UUID4
+from pydantic import BaseModel, UUID4, StrictBool
 from enum import Enum
+from typing import Optional
+
+
+class RequestType(str, Enum):
+    pto = 'PTO'
+    sick = 'SICK'
+    unpaid = 'UNPAID'
 
 
 class RequestSchema(BaseModel):
     id: UUID4
     employee_id: UUID4
-    type: Enum
+    type: RequestType
     message: str
     superior_message: str
-    cancelled: Enum
-    request_date: datetime
-    response_date: datetime
+    cancelled: StrictBool = False
+    request_date: date
+    response_date: date
 
     class Config:
         orm_mode = True
@@ -20,12 +27,12 @@ class RequestSchema(BaseModel):
 
 class RequestSchemaIn(BaseModel):
     employee_id: UUID4
-    type: Enum
-    message: str
-    superior_message: str
-    cancelled: Enum
-    request_date: datetime
-    response_date: datetime
+    type: RequestType
+    message: Optional[str]
+    superior_message: Optional[str]
+    cancelled: Optional[StrictBool] = False
+    request_date: Optional[date]
+    response_date: Optional[date]
 
     class Config:
         orm_mode = True

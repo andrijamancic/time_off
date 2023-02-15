@@ -1,35 +1,24 @@
 from uuid import uuid4
-from datetime import datetime
-
-from sqlalchemy import Column, String, Date, ForeignKey, Enum
+from datetime import date
+from sqlalchemy import Column, String, Date, ForeignKey, Enum, Boolean
 from app.db import Base
-
-
-class RequestType(Enum):
-    pto = 1
-    sick = 2
-    unpaid = 3
-
-
-class CancelledType(Enum):
-    true = 1
-    false = 2
+from app.requests.schemas import RequestType
 
 
 class Request(Base):
     __tablename__ = "requests"
     id = Column(String(50), primary_key=True, default=uuid4, autoincrement=False)
-    type = Column(RequestType)
-    cancelled = Column(CancelledType)
+    type = Column(Enum(RequestType))
+    cancelled = Column(Boolean, default=False)
     message = Column(String(250))
     superior_message = Column(String(250))
     request_date = Column(Date)
     response_date = Column(Date)
 
-    employee_id = Column(String, ForeignKey("employees.id"), nullable=False)
+    employee_id = Column(String(50), ForeignKey("employees.id"), nullable=False)
 
-    def __init__(self, type: RequestType, cancelled: CancelledType, message: str, superior_message: str,
-                 request_date: str, response_date: str, employee_id):
+    def __init__(self, type: RequestType, cancelled: Boolean, message: str, superior_message: str,
+                 request_date: date, response_date: date, employee_id: str):
         self.type = type
         self.cancelled = cancelled
         self.message = message
