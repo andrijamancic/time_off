@@ -4,9 +4,20 @@ from fastapi import APIRouter, Depends
 
 from app.requests.controller.request_controller import RequestController
 
-from app.requests.schemas import RequestSchema, RequestSchemaIn, RequestType
+from app.requests.schemas import RequestSchema, RequestSchemaIn, RequestSchemaEmployee, RequestType
 
 request_router = APIRouter(tags=["requests"], prefix="/api/requests")
+
+
+@request_router.post("/create-request/employee", response_model=RequestSchema)
+def create_employee_request(request: RequestSchemaEmployee):
+    return RequestController.create_employee_request(request.type, request.message, request.request_date,
+                                                     request.response_date, request.employee_id)
+
+
+@request_router.post("/cancel-request/employee", response_model=RequestSchema)
+def cancel_employee_request(request_id: str):
+    return RequestController.cancel_employee_request(request_id)
 
 
 @request_router.post("/create-request", response_model=RequestSchema)

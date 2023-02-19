@@ -22,6 +22,16 @@ class RequestRepository:
         except IntegrityError as e:
             raise e
 
+    def create_employee_request(self, type, message, request_date, response_date, employee_id):
+        try:
+            request = Request(type, None, message, None, request_date, response_date, employee_id)
+            self.db.add(request)
+            self.db.commit()
+            self.db.refresh(request)
+            return request
+        except IntegrityError as e:
+            raise e
+
     def get_all_requests(self):
         request = self.db.query(Request).all()
         return request
@@ -70,6 +80,22 @@ class RequestRepository:
                 request.response_date = response_date
             if employee_id is not None:
                 request.employee_id = employee_id
+            self.db.add(request)
+            self.db.commit()
+            self.db.refresh(request)
+            return request
+        except Exception as e:
+            raise e
+
+    def update_request_to_cancelled(self, request_id: str):
+        try:
+            request = self.db.query(Request).filter(Request.id == request_id).first()
+
+            if request is None:
+                raise RequestNotFoundException(f"Request with ID: {request_id}  not found.", 400)
+
+            request.cancelled = True
+
             self.db.add(request)
             self.db.commit()
             self.db.refresh(request)

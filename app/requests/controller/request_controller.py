@@ -18,6 +18,22 @@ class RequestController:
             raise HTTPException(status_code=500, detail=str(e))
 
     @staticmethod
+    def create_employee_request(type, message, request_date, response_date, employee_id):
+        try:
+            request = RequestServices.create_employee_request(type, message, request_date, response_date, employee_id)
+            return request
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    @staticmethod
+    def cancel_employee_request(request_id: str):
+        try:
+            request = RequestServices.update_request_to_cancelled(request_id)
+            return request
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    @staticmethod
     def get_all_requests():
         try:
             request = RequestServices.get_all_requests()

@@ -99,3 +99,27 @@ class EmployeeRepository:
             return employee
         except Exception as e:
             raise e
+
+    def update_employee_add_day(self, employee_id: str, amount: int = 1):
+        try:
+            employee = self.db.query(Employee).filter(Employee.id == employee_id).first()
+            employee.days_off = employee.days_off + amount
+
+            self.db.add(employee)
+            self.db.commit()
+            self.db.refresh(employee)
+            return employee
+        except Exception as e:
+            raise e
+
+    def update_employee_remove_day(self, employee_id: str):
+        try:
+            employee = self.db.query(Employee).filter(Employee.id == employee_id).first()
+            employee.days_off = employee.days_off - 1
+
+            self.db.add(employee)
+            self.db.commit()
+            self.db.refresh(employee)
+            return employee
+        except Exception as e:
+            raise e
