@@ -5,9 +5,9 @@ Aplikacija za zakazivanje odmora
 Aplikacija koja bi omogućila pracenje odsustva zaposlenima u firmama. 
 Radinici imaju mogucnost da posalju zahtev za odobrenje koriscenja godisnjeg odmora ili neplacenog odustva.
 Takodje postoji mogucnost evidencije bolovanja. Zahtev za odsustvo odobrava nadredjeni. Takodje postoji kaledar koji sluzi 
-za koordinaciju odsustva izmenju kolega. Aplikacija unosi u evidenciju I neradne dane (verske I drzavne praznike) 
+za koordinaciju odsustva izmedju kolega. Aplikacija unosi u evidenciju I neradne dane (verske I drzavne praznike) 
 koji su definisani po razlicitim grupama kako bi se praznici mogli prilagoditi razlcitim nacionalnostima I razlictim 
-veroispovestima koji je veoma bitan deo u multi etnickim radnim okruzenjima koja se cesto srecu kada je u pitanju remote rada od kuce.
+veroispovestima koji je veoma bitan deo u multi etnickim radnim okruzenjima koja se cesto srecu kada je u pitanju remote rad od kuce.
 Program ogranicava radnike u pogledu broja dana godisnjeg odmora koje je radnik u mogucnosti da uzme u jednoj godini.  
 
 
@@ -21,20 +21,20 @@ kada je zaposleni glavni u firmi (npr. Direktor/vlasnik) i odobrava sam sebi ods
 2.	requests
 Zahtevi za odusustvo. svaki zaposleni moze uputiti zahtev za ostustvo gde se definise datum I 
 vrsta osustva: placeno, neplaceno, bolovanje. Zahtev moze da se odobri od strane nadredjenog u 
-slucaju da zahtev salje radnik koji nema nadredjenog(director), zahtev se automatski smatra odobrenim.
+slucaju da zahtev salje radnik koji nema nadredjenog(direktor), zahtev se automatski smatra odobrenim.
 -- Type ENUM(odmor, bolovanje, neplaceno)
 -- Cancelled Bool(True u slucaju da zaposleni otkaze, default je False)
 
 3.	requestDates
 Dan odsustva na zahtevu. Mora postojati kao poseban entitet zbog prisustva one-to-many relacije u odnosu na zahtev. 
 Jedan zahtev ima vise datuma(dana) 
--- Status ENUM(dozvoljeno, odbijeno) 
+-- Status ENUM(na cekanju, dozvoljeno, odbijeno) 
 
 4.	holidayGroups
 Grupe praznika, neradnih dana: aplikacija sadri grupe praznika koje se dodelju radnicima pripadjuce nacionalnosti I veroispovesti. 
 
 5.	holidayGroupsDates
-Dani praznika grupe. Svaka grupa sadzi vise dana praznika gde su definisani datum I ime praznika. 
+Dani praznika grupe. Svaka grupa sadzi vise dana praznika, gde su definisani datum I ime praznika. 
 
 
 
