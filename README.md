@@ -62,8 +62,8 @@ Endpoints:
 16.	Lista odsutnih radnika danas
 
 Dodatne funkcionalnosti:
-•	Endpoints (12 I 13) - Nadređeni može da odobri deo zatraženih dana u zahtevu. U tom slučaju, uputilac zahteva 
-  ima pravo da otkaže zahtev, ali samo ukoliko je datum otkazivanja pre datuma početka odsustva koji je zahtevao 
-  (može da otkaže samo te koji su delimično odobreni, ove regularne ne može).
+
+•	Endpoints (12 I 13) - Nadređeni može da odobri deo zatraženih dana u zahtevu. U tom slučaju, uputilac zahteva ima pravo da otkaže zahtev, ali samo ukoliko je datum otkazivanja pre datuma početka odsustva koji je zahtevao (može da otkaže samo te koji su delimično odobreni, ove regularne ne može).
+  
 •	Imejl se šalje sa servera podnosiocu zahteva u trenutku kada mu se odobri odsustvo, kako bi bio obavešten o tome.
 
