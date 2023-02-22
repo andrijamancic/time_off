@@ -36,7 +36,8 @@ Grupe praznika, neradnih dana: aplikacija sadri grupe praznika koje se dodelju r
 5.	holidayGroupsDates
 Dani praznika grupe. Svaka grupa sadzi vise dana praznika gde su definisani datum I ime praznika. 
 
-
+admin user: admin@itbc.rs
+admin pass: Admin123
 
 Endpoints:
 
