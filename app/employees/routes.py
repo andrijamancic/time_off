@@ -2,12 +2,18 @@ from datetime import date
 
 from fastapi import APIRouter, Depends
 
+from app.employees.controller.employee_auth_controller import JWTBearer
 from app.employees.controller.employee_controller import EmployeeController
 
-from app.employees.schemas.employee_schemas import EmployeeSchema, EmployeeSchemaIn
-
+from app.employees.schemas.employee_schemas import EmployeeSchema, EmployeeSchemaIn, EmployeeLoginSchema
 
 employee_router = APIRouter(tags=["employees"], prefix="/api/employees")
+login_router = APIRouter(tags=["LogIn"])
+
+
+@login_router.post("/login")
+def login_employee(employee: EmployeeLoginSchema):
+    return EmployeeController.login_employee(employee.email, employee.password)
 
 
 @employee_router.post("/add-new-employee", response_model=EmployeeSchema)
@@ -27,7 +33,7 @@ def create_employee(employee: EmployeeSchemaIn):
                                               employee.days_off)
 
 
-@employee_router.get("/id", response_model=EmployeeSchema)
+@employee_router.get("/id", response_model=EmployeeSchema, dependencies=[Depends(JWTBearer("superior_employee"))])
 def get_employee_by_id(employee_id: str):
     return EmployeeController.get_employee_by_id(employee_id)
 
@@ -37,12 +43,13 @@ def get_all_employees():
     return EmployeeController.get_all_employees()
 
 
-@employee_router.delete("/")# , dependencies=[Depends(JWTBearer("super_user"))])
+@employee_router.delete("/", dependencies=[Depends(JWTBearer("superior_employee"))])
 def delete_employee_by_id(employee_id: str):
     return EmployeeController.delete_employee_by_id(employee_id)
 
 
-@employee_router.put("/update-employee-by-id", response_model=EmployeeSchema) # , dependencies=[Depends(JWTBearer("super_user"))])
+@employee_router.put("/update-employee-by-id", response_model=EmployeeSchema,
+                     dependencies=[Depends(JWTBearer("superior_employee"))])
 def update_employee(
     employee_id: str,
     email: str = None,

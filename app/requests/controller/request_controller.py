@@ -1,7 +1,5 @@
 from datetime import date
-
-from fastapi import HTTPException, Response, status
-
+from fastapi import HTTPException, Response
 from app.requests.exceptions import RequestNotFoundException
 from app.requests.schemas import RequestType
 from app.requests.services.requests_services import RequestServices
@@ -13,6 +11,22 @@ class RequestController:
         try:
             request = RequestServices.create_request(type, cancelled, message, superior_message, request_date,
                                                      response_date, employee_id)
+            return request
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    @staticmethod
+    def create_employee_request(type, message, request_date, response_date, employee_id):
+        try:
+            request = RequestServices.create_employee_request(type, message, request_date, response_date, employee_id)
+            return request
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+    @staticmethod
+    def cancel_employee_request(request_id: str):
+        try:
+            request = RequestServices.update_request_to_cancelled(request_id)
             return request
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))

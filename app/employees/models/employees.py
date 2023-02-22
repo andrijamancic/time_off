@@ -1,5 +1,5 @@
 from uuid import uuid4
-from datetime import date, datetime
+from datetime import date
 from sqlalchemy import Column, String, ForeignKey, Date, Integer
 from sqlalchemy.orm import relationship
 
@@ -33,7 +33,6 @@ class Employee(Base):
         self.password = password
         self.first_name = first_name
         self.last_name = last_name
-        # self.date_of_birth = datetime.strptime(date_of_birth, "%Y-%m-%d")
         self.date_of_birth = date_of_birth
         self.phone_number = phone_number
         self.street_name = street_name

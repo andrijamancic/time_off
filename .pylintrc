@@ -1,0 +1,23 @@
+[MASTER]
+init-hook=
+    from pylint.config import find_pylintrc; import os, sys;
+    sys.path.append(os.path.dirname(find_pylintrc()))
+    try: import pylint_venv
+    except ImportError: pass
+    else: pylint_venv.inithook(force_venv_activation=True)
+disable=
+    C0114, C0115, C0116
+
+
+[BASIC]
+good-names = db, e
+
+[DESIGN]
+min-public-methods=0
+
+[FORMAT]
+max-line-length=120
+
+[MESSAGES CONTROL]
+disable=
+    too-many-instance-attributes

@@ -30,3 +30,20 @@ class RequestDateSchemaIn(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class EmployeeRequestDateSchema(BaseModel):
+    request_id: str
+    employee_id: str
+    r_date: date
+
+    class Config:
+        orm_mode = True
+
+
+class SuperiorRequestDateSchema(BaseModel):
+    request_id: str
+    status: RequestDateStatus
+
+    class Config:
+        orm_mode = True

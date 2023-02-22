@@ -36,3 +36,14 @@ class RequestSchemaIn(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class RequestSchemaEmployee(BaseModel):
+    employee_id: UUID4
+    type: RequestType
+    message: Optional[str]
+    request_date: Optional[date]
+    response_date: Optional[date]
+
+    class Config:
+        orm_mode = True

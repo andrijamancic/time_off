@@ -1,12 +1,12 @@
 from datetime import date
 
-from pydantic import BaseModel, UUID4
+from pydantic import BaseModel, UUID4, EmailStr
 from typing import Optional
 
 
 class EmployeeSchema(BaseModel):
     id: UUID4
-    email: str
+    email: EmailStr
     password: str
     first_name: str
     last_name: str
@@ -25,7 +25,7 @@ class EmployeeSchema(BaseModel):
 
 
 class EmployeeSchemaIn(BaseModel):
-    email: Optional[str] = None
+    email: Optional[EmailStr] = None
     password: Optional[str] = None
     first_name: Optional[str] = None
     last_name: Optional[str] = None
@@ -41,3 +41,8 @@ class EmployeeSchemaIn(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class EmployeeLoginSchema(BaseModel):
+    email: EmailStr
+    password: str
