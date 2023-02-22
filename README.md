@@ -37,7 +37,9 @@ Grupe praznika, neradnih dana: aplikacija sadri grupe praznika koje se dodelju r
 Dani praznika grupe. Svaka grupa sadzi vise dana praznika gde su definisani datum I ime praznika. 
 
 DUMP BAZE PODATAKA SE NALAZI U init_db DIREKTORIJUMU
+
 admin user: admin@itbc.rs
+
 admin pass: Admin123
 
 Endpoints:
