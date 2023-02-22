@@ -6,7 +6,7 @@ from typing import Optional
 
 class EmployeeSchema(BaseModel):
     id: UUID4
-    email: str
+    email: EmailStr
     password: str
     first_name: str
     last_name: str
@@ -41,3 +41,8 @@ class EmployeeSchemaIn(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class EmployeeLoginSchema(BaseModel):
+    email: EmailStr
+    password: str

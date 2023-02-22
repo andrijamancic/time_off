@@ -1,7 +1,5 @@
 from datetime import date
-
-from fastapi import HTTPException, Response, status
-
+from fastapi import HTTPException, Response
 from app.requests.exceptions import RequestNotFoundException
 from app.requests.schemas import RequestType
 from app.requests.services.requests_services import RequestServices

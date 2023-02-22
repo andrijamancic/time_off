@@ -1,6 +1,8 @@
+import hashlib
 from datetime import date
 
 from app.db.database import SessionLocal
+from app.employees.exceptions import EmployeeInvalidPasswordException
 from app.employees.repositories.employee_repository import EmployeeRepository
 
 
@@ -8,14 +10,18 @@ class EmployeeServices:
     @staticmethod
     def create_employee(email, password, first_name, last_name, date_of_birth, phone_number,
                         street_name, city, postal_code, country, holiday_group_id, superior_id, days_off):
-        try:
-            with SessionLocal() as db:
+        with SessionLocal() as db:
+            try:
                 employee_repository = EmployeeRepository(db)
-                return employee_repository.create_employee(email, password, first_name, last_name, date_of_birth,
-                                                           phone_number, street_name, city, postal_code, country,
-                                                           holiday_group_id, superior_id, days_off)
-        except Exception as e:
-            raise e
+                hashed_password = hashlib.sha256(bytes(password, "utf-8")).hexdigest()
+                return employee_repository.create_employee(email=email, password=hashed_password,
+                                                           first_name=first_name, last_name=last_name,
+                                                           date_of_birth=date_of_birth, phone_number=phone_number,
+                                                           street_name=street_name, city=city, postal_code=postal_code,
+                                                           country=country, holiday_group_id=holiday_group_id,
+                                                           superior_id=superior_id, days_off=days_off)
+            except Exception as e:
+                raise e
 
     @staticmethod
     def get_employee_by_id(employee_id: str):
@@ -65,8 +71,28 @@ class EmployeeServices:
         try:
             with SessionLocal() as db:
                 employee_repository = EmployeeRepository(db)
-                return employee_repository.update_employee(employee_id, email, password, first_name, last_name,
-                                                        date_of_birth, phone_number, street_name, city, postal_code,
-                                                        country, holiday_group_id, superior_id, days_off)
+                if password is not None:
+                    hashed_password = hashlib.sha256(bytes(password, "utf-8")).hexdigest()
+                    return employee_repository.update_employee(employee_id, email, hashed_password, first_name,
+                                                               last_name, date_of_birth, phone_number, street_name,
+                                                               city, postal_code, country, holiday_group_id,
+                                                               superior_id, days_off)
+                else:
+                    return employee_repository.update_employee(employee_id, email, password, first_name,
+                                                               last_name, date_of_birth, phone_number, street_name,
+                                                               city, postal_code, country, holiday_group_id,
+                                                               superior_id, days_off)
         except Exception as e:
             raise e
+
+    @staticmethod
+    def login_employee(email: str, password: str):
+        with SessionLocal() as db:
+            try:
+                user_repository = EmployeeRepository(db)
+                user = user_repository.get_employee_by_email(email)
+                if hashlib.sha256(bytes(password, "utf-8")).hexdigest() != user.password:
+                    raise EmployeeInvalidPasswordException(message="Invalid password for employee", code=401)
+                return user
+            except Exception as e:
+                raise e

@@ -1,10 +1,9 @@
-from app.employees.repositories.employee_repository import EmployeeRepository
-from app.request_dates.exceptions.request_date_exceptions import RequestDateExceptionCode, WrongSuperiorException, \
-    NoDaysException, RequestDateAlreadyApprovedException
-from app.request_dates.models import RequestDate
-from app.request_dates.repositories.request_dates_repository import RequestDateRepository
-from app.db import SessionLocal
 from datetime import date
+from app.employees.repositories import EmployeeRepository
+from app.request_dates.exceptions import WrongSuperiorException, \
+    NoDaysException, RequestDateAlreadyApprovedException
+from app.request_dates.repositories import RequestDateRepository
+from app.db import SessionLocal
 
 from app.request_dates.schemas import RequestDateStatus
 
@@ -12,6 +11,19 @@ from app.request_dates.schemas import RequestDateStatus
 class RequestDateService:
     @staticmethod
     def create_request_date(r_date: date, status: RequestDateStatus, request_id: str, employee_id: str):
+        """
+        It creates a request date object and adds it to the database
+
+        :param r_date: date - the date of the request
+        :type r_date: date
+        :param status: RequestDateStatus = RequestDateStatus.PENDING
+        :type status: RequestDateStatus
+        :param request_id: The id of the request that the request date is associated with
+        :type request_id: str
+        :param employee_id: the id of the employee who is requesting the date
+        :type employee_id: str
+        :return: A RequestDate object
+        """
         try:
             with SessionLocal() as db:
                 request_date_repository = RequestDateRepository(db)
@@ -21,6 +33,17 @@ class RequestDateService:
 
     @staticmethod
     def employee_create_request_date(r_date: date, request_id: str, employee_id: str):
+        """
+        It takes a date, a request ID, and an employee ID, and then it creates a request date for the employee
+
+        :param r_date: date - the date the employee wants to take off
+        :type r_date: date
+        :param request_id: str
+        :type request_id: str
+        :param employee_id: str
+        :type employee_id: str
+        :return: The return value is the request date object that was created.
+        """
         try:
             with SessionLocal() as db:
                 request_date_repository = RequestDateRepository(db)
@@ -37,6 +60,10 @@ class RequestDateService:
 
     @staticmethod
     def get_all_requested_dates():
+        """
+        It gets all the requested dates from the database
+        :return: A list of all the requested dates
+        """
         try:
             with SessionLocal() as db:
                 requested_dates_repository = RequestDateRepository(db)
@@ -46,6 +73,10 @@ class RequestDateService:
 
     @staticmethod
     def get_calendar():
+        """
+        It gets the calendar
+        :return: A list of dates that are in the database.
+        """
         try:
             with SessionLocal() as db:
                 requested_dates_repository = RequestDateRepository(db)
@@ -55,6 +86,10 @@ class RequestDateService:
 
     @staticmethod
     def get_absent_today():
+        """
+        It gets all the dates that are absent today
+        :return: A list of all the users that are absent today.
+        """
         try:
             with SessionLocal() as db:
                 requested_dates_repository = RequestDateRepository(db)
@@ -64,6 +99,13 @@ class RequestDateService:
 
     @staticmethod
     def get_requested_date_by_id(request_date_id: str):
+        """
+        It gets a requested date by id
+
+        :param request_date_id: str
+        :type request_date_id: str
+        :return: A list of RequestedDate objects
+        """
         try:
             with SessionLocal() as db:
                 requested_dates_repository = RequestDateRepository(db)
@@ -73,6 +115,13 @@ class RequestDateService:
 
     @staticmethod
     def get_requested_dates_by_employee_id(employee_id: str):
+        """
+        It gets the requested dates by employee id
+
+        :param employee_id: str
+        :type employee_id: str
+        :return: A list of RequestedDates objects
+        """
         try:
             with SessionLocal() as db:
                 employee_repository = EmployeeRepository(db)
@@ -86,6 +135,13 @@ class RequestDateService:
 
     @staticmethod
     def delete_requested_date_by_id(request_date_id: str):
+        """
+        It deletes a requested date by id
+
+        :param request_date_id: str
+        :type request_date_id: str
+        :return: A boolean value.
+        """
         try:
             with SessionLocal() as db:
                 requested_date_repository = RequestDateRepository(db)
@@ -100,6 +156,15 @@ class RequestDateService:
                                     status: RequestDateStatus = None,
                                     request_id: str = None,
                                     employee_id: str = None):
+
+        """
+        :param request_date_id:
+        :param r_date:
+        :param status:
+        :param request_id:
+        :param employee_id:
+        :return:
+        """
         try:
             with SessionLocal() as db:
                 request = RequestDateRepository(db)
@@ -110,6 +175,18 @@ class RequestDateService:
 
     @staticmethod
     def superior_update_requested_date_by_id(request_date_id: str, superior_id: str, status: RequestDateStatus):
+        """
+        It updates the status of a requested date by its ID, and if the status is approved, it removes a day from the
+        employee's days off
+
+        :param request_date_id: str, superior_id: str, status: RequestDateStatus
+        :type request_date_id: str
+        :param superior_id: str - the id of the superior who is approving the request
+        :type superior_id: str
+        :param status: RequestDateStatus
+        :type status: RequestDateStatus
+        :return: The return value is the updated requested date.
+        """
         try:
             with SessionLocal() as db:
                 requested_dates_repository = RequestDateRepository(db)
@@ -126,8 +203,9 @@ class RequestDateService:
                                                  400)
 
                 if request_date.status == RequestDateStatus.approved:
-                    raise RequestDateAlreadyApprovedException(f"Requested date already approved", 400)
-                elif status == RequestDateStatus.approved:
+                    raise RequestDateAlreadyApprovedException("Requested date already approved", 400)
+
+                if status == RequestDateStatus.approved:
                     employee_repository.update_employee_remove_day(request_date.employee_id)
 
                 return requested_dates_repository.superior_update_request_date_by_id(request_date_id, status)

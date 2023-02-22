@@ -31,6 +31,10 @@ class EmployeeRepository:
             raise EmployeeNotFoundException(f"Employee with provided ID: *** {employee_id} *** not found.", 400)
         return employee
 
+    def get_employee_by_email(self, email: str):
+        employee = self.db.query(Employee).filter(Employee.email == email).first()
+        return employee
+
     def get_all_employees(self):
         employee = self.db.query(Employee).all()
         return employee
@@ -46,23 +50,21 @@ class EmployeeRepository:
         except Exception as e:
             raise e
 
-    def update_employee(
-        self,
-            employee_id: str,
-            email: str = None,
-            password: str = None,
-            first_name: str = None,
-            last_name: str = None,
-            date_of_birth: date = None,
-            phone_number: str = None,
-            street_name: str = None,
-            city: str = None,
-            postal_code: str = None,
-            country: str = None,
-            holiday_group_id: str = None,
-            superior_id: str = None,
-            days_off: int = None
-    ):
+    def update_employee(self,
+                        employee_id: str,
+                        email: str = None,
+                        password: str = None,
+                        first_name: str = None,
+                        last_name: str = None,
+                        date_of_birth: date = None,
+                        phone_number: str = None,
+                        street_name: str = None,
+                        city: str = None,
+                        postal_code: str = None,
+                        country: str = None,
+                        holiday_group_id: str = None,
+                        superior_id: str = None,
+                        days_off: int = None):
         try:
             employee = self.db.query(Employee).filter(Employee.id == employee_id).first()
             if employee is None:
