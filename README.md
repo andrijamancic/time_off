@@ -20,7 +20,7 @@ kada je zaposleni glavni u firmi (npr. Direktor/vlasnik) i odobrava sam sebi ods
 
 2.	requests
 Zahtevi za odusustvo. svaki zaposleni moze uputiti zahtev za ostustvo gde se definise datum I 
-vrsta osustva: placeno, neplaceno, bolovanje. Zahtev moze da se odobri od strane nadredjenog u 
+vrsta osustva: placeno, neplaceno, bolovanje. Zahtev moze da se odobri od strane nadredjenog, a u 
 slucaju da zahtev salje radnik koji nema nadredjenog(direktor), zahtev se automatski smatra odobrenim.
 -- Type ENUM(odmor, bolovanje, neplaceno)
 -- Cancelled Bool(True u slucaju da zaposleni otkaze, default je False)
